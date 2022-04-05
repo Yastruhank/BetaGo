@@ -22,8 +22,11 @@ class SQL:
         self.last_connect_time = time.time()
 
     def reconnect(self):
-        self.cursor.close()
-        self.conn.close()
+        try:
+            self.cursor.close()
+            self.conn.close()
+        except:
+            print('close error')
         conn = pymysql.connect(host=self.host, port=self.port, db=self.db,
                                user=self.user, password=self.password)
         self.cursor = self.conn.cursor(pymysql.cursors.DictCursor)

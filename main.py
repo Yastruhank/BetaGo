@@ -329,7 +329,7 @@ async def menu(app: Ariadne, event: MessageEvent, sender: Union[Friend, Member, 
                                                       "    BB作业提醒订阅,大物实验提醒订阅,青年大学习提醒等订阅开发中\n" +
                                                       "->聊天功能\n    @robot [聊天内容] : 与机器人对话(api:茉莉机器人)\n" +
                                                       "->寝室功能\n    谁带饭 [@第一个候选带饭候选人] [@第二个候选带饭候选人]... 随机产生一名带饭人选\n" +
-                                                      "    核酸信息统计,青年大学习信息统计等东南开发中\n" +
+                                                      "    核酸信息统计,青年大学习信息统计等功能开发中\n" +
                                                       "->账号管理\n    绑定 [学号] [密码] 绑定你的东北大学一网通账号,本功能建议私聊完成\n"),Face(147),
                                                       Plain("本项目采用AGPL协议开源,地址为https://github.com/Yastruhank/BetaGo,欢迎各位参与开发")), sender, event.type)
 
