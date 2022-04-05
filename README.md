@@ -6,7 +6,7 @@ QQ Robot based on Mirai and Ariadne
 
 > 适用于东北大学应用场景
 
-<a href="https://github.com/Yastruhank/BetaGo/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-APGL--3.0-green"></a>
+<a href="https://github.com/Yastruhank/BetaGo/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-APGL--3.0-green"></a>
 </div>
 
 ## 注意
