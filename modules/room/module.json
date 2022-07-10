@@ -1,0 +1,16 @@
+{
+    "name": "寝室模块",
+    "description": "用于寝室场景与日常大学生活",
+    "module": [
+        "modules.room.room"
+    ],
+    "command": [
+        {
+            "name": "谁带饭",
+            "usage": "谁带饭 [@第一个候选带饭候选人] [@第二个候选带饭候选人] ... ->在选中人选中生成一个带饭人选\n谁带饭 [@全体成员] ->在本群除机器人外的成员中产生一个带饭人选",
+            "description": "解决寝室纠纷,解决带饭难题",
+            "from": "modules.room.room",
+            "hidden": 0
+        }
+    ]
+}

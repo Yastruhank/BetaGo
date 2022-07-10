@@ -1,0 +1,31 @@
+{
+    "name": "管理模块",
+    "description": "机器人的系统相关指令",
+    "module": [
+        "modules.admin.test",
+        "modules.admin.menu"
+    ],
+    "command": [
+        {
+            "name": "测试",
+            "usage": "测试 ->测试机器人是否在线",
+            "description": "用于测试机器人是否在线",
+            "from": "modules.admin.test",
+            "hidden": 0
+        },
+        {
+            "name": "菜单",
+            "usage": "菜单 ->显示所有已加载模块\n菜单 [模块] ->显示该模块下所有指令\n菜单 [模块] [指令] ->显示指令具体用法",
+            "description": "用于获取机器人指令帮助",
+            "from": "modules.admin.menu",
+            "hidden": 0
+        },
+        {
+            "name": "隐藏菜单",
+            "usage": "隐藏菜单 ->显示所有包含隐藏指令的已加载模块\n隐藏菜单 [模块] ->显示该模块下所有隐藏指令\n隐藏菜单 [模块] [指令] ->显示隐藏指令具体用法",
+            "description": "用于获取机器人隐藏指令信息,包含不宜在工作期间访问的内容",
+            "from": "modules.admin.menu",
+            "hidden": 1
+        }
+    ]
+}

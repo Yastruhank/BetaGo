@@ -1,0 +1,16 @@
+{
+    "name": "聊天模块",
+    "description": "机器人的聊天系统",
+    "module": [
+        "modules.chat.chat_handle"
+    ],
+    "command": [
+        {
+            "name": "聊天语句",
+            "usage": "[@机器人] 聊天语句\n[提到机器人名字或群名片] 聊天语句",
+            "description": "与机器人聊天",
+            "from": "modules.chat.chat_handle",
+            "hidden": 0
+        }
+    ]
+}

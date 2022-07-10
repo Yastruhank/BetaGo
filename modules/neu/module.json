@@ -1,0 +1,48 @@
+{
+    "name": "东北大学模块",
+    "description": "用于东北大学场景",
+    "module": [
+        "modules.neu.NEU_BB",
+        "modules.neu.NEU_HealReport_handle",
+        "modules.neu.NEU_Bind",
+        "modules.neu.NEU_EduSys_handle",
+        "modules.neu.webvpn_handle"
+    ],
+    "command": [
+        {
+            "name": "绑定",
+            "usage": "绑定 [一网通学号] [一网通密码] ->绑定对应一网通账号",
+            "description": "用于绑定QQ号与一网通账号,为部分其他指令的必要操作",
+            "from": "modules.neu.NEU_Bind",
+            "hidden": 0
+        },
+        {
+            "name": "健康打卡",
+            "usage": "健康打卡 [可选:{早\\中\\晚}中一个或多个参数] ->进行本日健康上报,若可选参数不为空,则同时进行对应时间的上报(仅在对应时间有效)\n健康上报 [可选:{早\\中\\晚}中一个或多个参数] ->进行本日健康上报,若可选参数不为空,则同时进行对应时间的上报(仅在对应时间有效)",
+            "description": "用于进行每日健康上报(订阅自动打卡需要订阅模块)",
+            "from": "modules.neu.NEU_HealReport_handle",
+            "hidden": 0
+        },
+        {
+            "name": "查询绩点",
+            "usage": "查询绩点 ->查询总绩点",
+            "description": "用于查询用户总绩点",
+            "from": "modules.neu.NEU_EduSys_handle",
+            "hidden": 0
+        },
+        {
+            "name": "查询学科成绩",
+            "usage": "查询学科成绩 ->查询当前默认学期所有学科成绩\n查询学科成绩 [搜索词] ->查询当前默认学期学科中包含搜索词的学科成绩",
+            "description": "用于查询用户在当前默认学期的学科成绩",
+            "from": "modules.neu.NEU_EduSys_handle",
+            "hidden": 0
+        },
+        {
+            "name": "webvpn解析",
+            "usage": "webvpn解析 [协议(支持http,https,ssh,rdp,vnc,默认http)]://[需要解析的地址]:[端口,http与https可不填]/[后续地址] ->生成对应地址的webvpn地址",
+            "description": "生成指定地址的webvpn地址用于校外访问",
+            "from": "modules.neu.webvpn_handle",
+            "hidden": 0
+        }
+    ]
+}

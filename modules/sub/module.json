@@ -1,0 +1,23 @@
+{
+    "name": "订阅模块",
+    "description": "订阅服务,可与其他模块联动",
+    "module": [
+        "modules.sub.subscribe"
+    ],
+    "command": [
+        {
+            "name": "订阅",
+            "usage": "订阅 [需要订阅的功能] [其他参数] ->完成对应功能的订阅服务",
+            "description": "服务订阅",
+            "from": "modules.sub.subscribe",
+            "hidden": 0
+        },
+        {
+            "name": "取消订阅",
+            "usage": "取消订阅 [需要取消订阅的功能] ->取消订阅对应的功能",
+            "description": "取消服务订阅",
+            "from": "modules.sub.subscribe",
+            "hidden": 0
+        }
+    ]
+}

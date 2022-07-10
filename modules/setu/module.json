@@ -1,0 +1,16 @@
+{
+    "name": "色图模块",
+    "description": "用于东北大学场景",
+    "module": [
+        "modules.setu.setu_handle"
+    ],
+    "command": [
+        {
+            "name": "来点涩图",
+            "usage": "[{来点涩图/来点色图/搜涩图/搜色图}] [可选参数:搜索词] ->获取一张随机的涩图,若可选参数搜索词不为空,则返回标题或Tag或作者名中包含搜索词的一张随机涩图",
+            "description": "不可以色色",
+            "from": "modules.setu.setu_handle",
+            "hidden": 1
+        }
+    ]
+}

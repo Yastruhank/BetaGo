@@ -1,0 +1,8 @@
+{
+    "name": "控制台模块",
+    "description": "允许用户在终端上控制机器人",
+    "module": [
+        "core.console.console"
+    ],
+    "command": []
+}
