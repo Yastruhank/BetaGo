@@ -15,12 +15,15 @@ channel = Channel.current()
 
 @channel.use(ListenerSchema(listening_events=[MessageEvent],decorators=[MentionMe()]))
 async def contact_bot(app: Ariadne, event: MessageEvent, sender: Union[Friend, Member, Client, Stranger], source: Source, message: MessageChain):
-    from modules.chat.Molly import molly_bot
+    # from modules.chat.Molly import molly_bot
+    from modules.chat.Turing import turing_bot
     if(event.type == 'GroupMessage'):
-        reply = await molly_bot.contact(str(
+        reply = await turing_bot.contact(str(
             message[Plain][0]), 2, sender.id, sender.name, sender.group.id, sender.group.name)
     else:
-        reply = await molly_bot.contact(
+        reply = await turing_bot.contact(
             str(message[Plain][0]), 1, sender.id, sender.nickname)
-    content = reply.get('data')[0].get('content')
+
+    content = reply.get('results')[0].get('values').get('text')
+        
     await SendMessage(app, MessageChain(Plain(content)), sender, event.type)
