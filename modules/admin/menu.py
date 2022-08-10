@@ -111,7 +111,7 @@ async def menu(app: Ariadne, event: MessageEvent, sender: Union[Friend, Member, 
     
 @channel.use(ListenerSchema(listening_events=[MessageEvent]))
 async def hide_menu(app: Ariadne, event: MessageEvent, sender: Union[Friend, Member, Client, Stranger], source: Source, message: MessageChain = DetectPrefix("隐藏菜单")):
-    if(sender.permission == MemberPerm.Member):
+    if(event.type == 'GroupMessage' and sender.permission == MemberPerm.Member):
         await SendMessage(app, MessageChain(Plain("权限不足,隐藏菜单仅限群管理员查看")), sender, event.type)
         return
     from core.load_param import channel_list

@@ -28,7 +28,7 @@ class SQL:
     async def select_one(self, table, index, param):
         await self.connect()
         self.cursor.execute("select * from " + table +
-                            " where " + index + " = " + param)
+                            " where " + index + " = '" + param + "'")
         data = self.cursor.fetchall()
         await self.disconnect()
         return data

@@ -11,6 +11,13 @@
             "description": "与机器人聊天",
             "from": "modules.chat.chat_handle",
             "hidden": 0
+        },
+        {
+            "name": "设置聊天机器人",
+            "usage": "设置聊天机器人 [机器人id]",
+            "description": "设置聊天的解析机器人,0为本地,1为图灵机器人,2为茉莉机器人",
+            "from": "modules.chat.chat_handle",
+            "hidden": 2
         }
     ]
 }

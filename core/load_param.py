@@ -13,20 +13,22 @@ from graia.ariadne.console import Console
 from prompt_toolkit.formatted_text import HTML
 from prompt_toolkit.styles import Style
 from graia.ariadne.console.saya import ConsoleBehaviour
+from loguru import logger
+
 
 config_json = {}
 modules_list = []
-with open("./config/config.json", "r") as json_file:
+with open("./config/config.json", "r", encoding='utf-8') as json_file:
     config_json = json.load(json_file)
     
-with open("./modules/setu/setu.json", "r") as json_file:
+with open("./modules/setu/setu.json", "r", encoding='utf-8') as json_file:
     setu_json = json.load(json_file)
             
 for module_info in pkgutil.iter_modules(["core"]):
     json_path = f"./core/{module_info.name}/module.json"
     if not os.path.exists(json_path):
         continue
-    with open(json_path, "r") as json_file:
+    with open(json_path, "r", encoding='utf-8') as json_file:
         json_content = json.load(json_file)
         for module in json_content['module']:
             modules_list.append(module)
@@ -35,7 +37,7 @@ for module_info in pkgutil.iter_modules(["modules"]):
     json_path = f"./modules/{module_info.name}/module.json"
     if not os.path.exists(json_path):
         continue
-    with open(json_path, "r") as json_file:
+    with open(json_path, "r", encoding='utf-8') as json_file:
         json_content = json.load(json_file)
         for module in json_content['module']:
             modules_list.append(module)
@@ -73,21 +75,25 @@ saya.install_behaviours(ConsoleBehaviour(con))
 sql = SQL(config_json['sql_host'], config_json['sql_port'],
           config_json['sql_database_name'], config_json['sql_database_user'], config_json['sql_database_passwd'])
 
-if(config_json['first_run']):
-    param = ("id char(20) primary key",
+logger.info('Checking database ...')
+async def check_data_base():
+    form = await sql.select_one('information_schema.TABLES','TABLE_NAME','eone_neu')
+    if(len(form) == 0):
+        param = ("id char(20) primary key",
              "eone_id char(9)", "eone_passwd char(20)")
-    loop = asyncio.get_event_loop()
-    if loop.is_running():
-        loop.create_task(sql.create("eone_neu",param))
-    else:
-        loop.run_until_complete(sql.create("eone_neu",param))
-    param = ("id char(20) primary key","tag int")
-    if loop.is_running():
-        loop.create_task(sql.create("jkdk_subscribe",param))
-    else:
-        loop.run_until_complete(sql.create("jkdk_subscribe",param))
-    config_json['first_run'] = False
-    with open("./config.json", "w") as config_file:
-        config_json = json.dump(config_file)
+        sql.create("eone_neu",param)
         
+    form = await sql.select_one('information_schema.TABLES','TABLE_NAME','jkdk_subscribe')
+    if(len(form) == 0):
+        param = ("id char(20) primary key","tag int")
+        sql.create("jkdk_subscribe",param)
+
+loop = asyncio.get_event_loop()
+if loop.is_running():
+    loop.create_task(check_data_base())
+else:
+    loop.run_until_complete(check_data_base())
+        
+logger.info('Check Done.')
+
 channel_list = {}

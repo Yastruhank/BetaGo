@@ -35,7 +35,8 @@ class Turing(object):
             __json['userInfo']['groupId	'] = group
         submit = await self.session.post('http://openapi.turingapi.com/openapi/api/v2',
                                    headers=self.__headers, json=__json)
-        return await submit.json(content_type='text/plain')
+        json_data = await submit.json(content_type='text/plain')
+        return json_data.get('results')[0].get('values').get('text')
 
 from core.load_param import config_json
 turing_bot = Turing(config_json['Turing_Api-Key'])

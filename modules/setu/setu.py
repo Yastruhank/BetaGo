@@ -1,4 +1,3 @@
-from nis import cat
 import aiohttp
 import json
 

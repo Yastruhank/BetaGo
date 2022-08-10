@@ -33,7 +33,8 @@ class Molly(object):
             __json['toName'] = group_name
         submit = await self.session.post('https://i.mly.app/reply',
                                    headers=self.__headers, json=__json)
-        return await submit.json()
+        json_data = await submit.json()
+        return json_data.get('data')[0].get('content')
 
 from core.load_param import config_json
 molly_bot = Molly(config_json['Molly_Api-Key'], config_json['Molly_Api-Secret'])

@@ -11,19 +11,45 @@ from graia.saya.builtins.broadcast.schema import ListenerSchema
 
 from utils.tools import SendMessage
 
+from modules.chat.Molly import molly_bot
+from modules.chat.Turing import turing_bot
+from modules.chat.DialogBot import dialogbot
+
 channel = Channel.current()
 
 @channel.use(ListenerSchema(listening_events=[MessageEvent],decorators=[MentionMe()]))
 async def contact_bot(app: Ariadne, event: MessageEvent, sender: Union[Friend, Member, Client, Stranger], source: Source, message: MessageChain):
-    # from modules.chat.Molly import molly_bot
-    from modules.chat.Turing import turing_bot
+    from core.load_param import config_json
+    bot = dialogbot
+    if config_json['chat_type'] == 1:
+        bot = turing_bot
+    if config_json['chat_type'] == 2:
+        bot = molly_bot
+                             
     if(event.type == 'GroupMessage'):
-        reply = await turing_bot.contact(str(
+        content = await bot.contact(str(
             message[Plain][0]), 2, sender.id, sender.name, sender.group.id, sender.group.name)
     else:
-        reply = await turing_bot.contact(
+        content = await bot.contact(
             str(message[Plain][0]), 1, sender.id, sender.nickname)
 
-    content = reply.get('results')[0].get('values').get('text')
         
     await SendMessage(app, MessageChain(Plain(content)), sender, event.type)
+    
+    
+@channel.use(ListenerSchema(listening_events=[MessageEvent]))
+async def set_chat(app: Ariadne, event: MessageEvent, sender: Union[Friend, Member, Client, Stranger], source: Source, message: MessageChain = DetectPrefix("设置聊天机器人")):
+    if sender.id != 359360997:
+        await SendMessage(app, MessageChain(Plain('权限不足')), sender, event.type)
+        return
+    param = str(message).strip()
+    try:
+        from core.load_param import config_json
+        id = int(param)
+        if id < 3 and id >= 0:
+            config_json['chat_type'] = id
+            await SendMessage(app, MessageChain(Plain('设置成功')), sender, event.type)
+        else:
+            await SendMessage(app, MessageChain(Plain('错误的参数')), sender, event.type)
+    except:
+        await SendMessage(app, MessageChain(Plain('错误的参数')), sender, event.type)
