@@ -33,7 +33,12 @@ QQ Robot based on Mirai and Ariadne
 * 若需启动语音聊天模块,请自行下载模型文件并放置在modules/voice_chat/module文件夹下,下载链接:</br>
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/Ed7PXqaBdllAki0TPpeZorgBFdnxirbX_AYGUIiIcWAYNg?e=avxkWs)</br>
 Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EXTQrTj-UJpItH3BmgIUvhgBNZk88P1tT_7GPNr4yegNyw?e=93bbpR)</br>
-模型来自开源项目[MoeGoe](https://github.com/CjangCjengh/MoeGoe)
+模型来自开源项目[MoeGoe](https://github.com/CjangCjengh/MoeGoe)</br>
+对于Linux系统, 还需要额外安装libsndfile, 例如在Ubuntu下, 可使用以下指令安装
+
+```shell
+sudo apt-get install libsndfile1
+```
 
 --------
 
