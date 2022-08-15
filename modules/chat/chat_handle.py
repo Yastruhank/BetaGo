@@ -27,11 +27,9 @@ async def contact_bot(app: Ariadne, event: MessageEvent, sender: Union[Friend, M
         bot = molly_bot
                              
     if(event.type == 'GroupMessage'):
-        content = await bot.contact(str(
-            message[Plain][0]), 2, sender.id, sender.name, sender.group.id, sender.group.name)
+        content = await bot.contact(str(message), 2, sender.id, sender.name, sender.group.id, sender.group.name)
     else:
-        content = await bot.contact(
-            str(message[Plain][0]), 1, sender.id, sender.nickname)
+        content = await bot.contact(str(message), 1, sender.id, sender.nickname)
 
         
     await SendMessage(app, MessageChain(Plain(content)), sender, event.type)

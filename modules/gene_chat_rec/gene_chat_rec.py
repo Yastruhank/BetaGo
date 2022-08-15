@@ -24,7 +24,7 @@ async def record(app: Ariadne, event: MessageEvent, sender: Union[Friend, Member
     await SendMessage(app, MessageChain(Plain("请输入聊天记录的内容\n格式为[@发言人] 内容\n用 输入完成 结束\n可用 创建用户 [目标QQ号] [目标群名片] 来创建一个虚拟用户\n2分钟内无应答自动退出")), sender, event.type)
     fwd_nodeList = []
     cnt = 0
-    async def detected_event(self, new_event: MessageEvent, new_sender: Union[Friend, Member, Client, Stranger], new_message: MessageChain, source: Source):
+    async def detected_event(new_event: MessageEvent, new_sender: Union[Friend, Member, Client, Stranger], new_message: MessageChain, source: Source):
         if sender.id == new_sender.id:
             if(type == 'GroupMessage'):
                 if sender.group == new_sender.group:

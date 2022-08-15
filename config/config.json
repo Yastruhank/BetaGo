@@ -6,6 +6,8 @@
     "Molly_Api-Key": "",
     "Molly_Api-Secret": "",
     "chat_type": 0,
+    "tentcloud_api_key": "",
+    "tentcloud_api_Secret": "",
     "sql_host": "",
     "sql_port": 0,
     "sql_database_name": "",

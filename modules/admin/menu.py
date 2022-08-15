@@ -35,7 +35,7 @@ class Menu(object):
             json_path = './' + div[0] + '/' + div[1] + '/module.json'
             if not os.path.exists(json_path):
                 continue
-            with open(json_path, "r") as json_file:
+            with open(json_path, "r", encoding='utf-8') as json_file:
                 json_content = json.load(json_file)
                 for command in json_content['command']:
                     if(command['from'] in self.channel_list and command['hidden'] == self.hidden):
@@ -51,7 +51,7 @@ class Menu(object):
             return '',[]
         command_name_list = []
         description = ''
-        with open(self.module_to_json[name], "r") as json_file:
+        with open(self.module_to_json[name], "r", encoding='utf-8') as json_file:
                 json_content = json.load(json_file)
                 description = json_content['description']
                 for command in json_content['command']:

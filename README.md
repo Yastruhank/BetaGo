@@ -5,7 +5,7 @@
 
 QQ Robot based on Mirai and Ariadne
 
-> 适用于东北大学应用场景
+> 适用于大学生活的应用场景, 适配了东北大学的部分功能
 
 <a href="https://github.com/Yastruhank/BetaGo/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-APGL--3.0-green"></a>
 </div>
@@ -22,11 +22,18 @@ QQ Robot based on Mirai and Ariadne
 
 ## 安装与依赖
 
-依赖参见项目路径下[`requirements.txt`](requirements.txt)
+* 依赖参见项目路径下[`requirements.txt`](requirements.txt)
 若需要启用聊天功能还需要[`requirements_chat.txt`](requirements_chat.txt)
 下依赖，且需要安装顺序为先安装[`requirements.txt`](requirements.txt)后安装[`requirements_chat.txt`](requirements_chat.txt)</br>
-若需启动本地聊天模型,请自行下载模型文件并放置在modules/chat/module文件夹下,下载链接:
+</br>
+* 若需启动本地聊天模型,请自行下载模型文件并放置在modules/chat/module文件夹下,下载链接:
 [百度网盘(提取码:aisq)](https://pan.baidu.com/share/init?surl=1KZ3hU2_a2MtI_StXBUKYw), 模型来自开源项目[dialogbot](https://github.com/shibing624/dialogbot),该项目采用[The Apache License 2.0](https://github.com/shibing624/dialogbot/blob/master/LICENSE)开源协议
+</br>
+</br>
+* 若需启动语音聊天模块,请自行下载模型文件并放置在modules/voice_chat/module文件夹下,下载链接:</br>
+Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/Ed7PXqaBdllAki0TPpeZorgBFdnxirbX_AYGUIiIcWAYNg?e=avxkWs)</br>
+Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EXTQrTj-UJpItH3BmgIUvhgBNZk88P1tT_7GPNr4yegNyw?e=93bbpR)</br>
+模型来自开源项目[MoeGoe](https://github.com/CjangCjengh/MoeGoe)
 
 --------
 
@@ -41,6 +48,8 @@ Turing_Api-Key | 图灵机器人的api(若不使用可留空)
 Molly_Api-Key | 茉莉机器人的api(若不使用可留空)
 Molly_Api-Secret | 茉莉机器人api的secret_key(若不使用可留空)
 chat_type | 使用的聊天机器人类型,0为本地模型,1为图灵机器人,2为茉莉机器人
+tentcloud_api_key | 腾讯云的api(共使用`文本翻译`与`一句话识别`两项服务)(若不使用可留空)
+tentcloud_api_Secret | 腾讯云api的secret_key(若不使用可留空)
 sql_host | MySQL数据库的ip地址
 sql_port | MySQL数据库的端口
 sql_database_name | MySQL数据库的库名称
