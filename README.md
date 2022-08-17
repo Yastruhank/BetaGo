@@ -26,10 +26,12 @@ QQ Robot based on Mirai and Ariadne
 若需要启用聊天功能还需要[`requirements_chat.txt`](requirements_chat.txt)
 下依赖，且需要安装顺序为先安装[`requirements.txt`](requirements.txt)后安装[`requirements_chat.txt`](requirements_chat.txt)</br>
 </br>
+
 * 若需启动本地聊天模型,请自行下载模型文件并放置在modules/chat/module文件夹下,下载链接:
 [百度网盘(提取码:aisq)](https://pan.baidu.com/share/init?surl=1KZ3hU2_a2MtI_StXBUKYw), 模型来自开源项目[dialogbot](https://github.com/shibing624/dialogbot),该项目采用[The Apache License 2.0](https://github.com/shibing624/dialogbot/blob/master/LICENSE)开源协议
 </br>
 </br>
+
 * 若需启动语音聊天模块,请自行下载模型文件并放置在modules/voice_chat/module文件夹下,下载链接:</br>
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/Ed7PXqaBdllAki0TPpeZorgBFdnxirbX_AYGUIiIcWAYNg?e=avxkWs)</br>
 Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EXTQrTj-UJpItH3BmgIUvhgBNZk88P1tT_7GPNr4yegNyw?e=93bbpR)</br>
