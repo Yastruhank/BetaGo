@@ -101,10 +101,7 @@ async def voice_chat(app: Ariadne, event: MessageEvent, sender: Union[Friend, Me
                 content = await bot.contact(str(recog_word), 2, sender.id, sender.name, sender.group.id, sender.group.name)
             else:
                 content = await bot.contact(str(recog_word), 1, sender.id, sender.nickname)
-                
-            content.replace('BetaGo','我')
-            
-            jp_content = tencent_translater.translate(content)
+            jp_content = tencent_translater.translate(content.replace('BetaGo','我'))
             voice_path = await moegoe.text_to_voice(jp_content, voice_type)
             if voice_path == None:
                 await SendMessage(app, MessageChain('文本出错'), sender, event.type)
@@ -163,11 +160,8 @@ async def voice_chat(app: Ariadne, event: MessageEvent, sender: Union[Friend, Me
             if(event.type == 'GroupMessage'):
                 content = await bot.contact(str(ret_msg), 2, sender.id, sender.name, sender.group.id, sender.group.name)
             else:
-                content = await bot.contact(str(ret_msg), 1, sender.id, sender.nickname)
-                
-            content.replace('BetaGo','我')
-                
-            jp_content = tencent_translater.translate(content)
+                content = await bot.contact(str(ret_msg), 1, sender.id, sender.nickname)                
+            jp_content = tencent_translater.translate(content.replace('BetaGo','我'))
             voice_path = await moegoe.text_to_voice(jp_content, voice_type)
             if voice_path == None:
                 await SendMessage(app, MessageChain('错误的文本输入'), sender, event.type)
