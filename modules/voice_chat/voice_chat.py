@@ -59,17 +59,6 @@ async def voice_chat(app: Ariadne, event: MessageEvent, sender: Union[Friend, Me
                 return new_message, source
             
     from core.load_param import config_json
-    try:
-        if config_json['chat_type'] == 1:
-            from modules.chat.Turing import turing_bot as bot
-        elif config_json['chat_type'] == 2:
-            from modules.chat.Molly import molly_bot as bot
-        else:
-            from modules.chat.DialogBot import dialogbot as bot
-    except:
-        logger.error('Chat module was not loaded correctly.')
-        await SendMessage(app, MessageChain(Plain("错误:聊天模块未加载,请联系机器人管理员")), sender, event.type)
-        
     await SendMessage(app, MessageChain('进入语音聊天模式,请使用 退出 指令退出模式\n此模式下任何发言都将会触发机器人语音聊天,2分钟后自动退出'), sender, event.type)
     
     voice_type = 0
@@ -82,6 +71,20 @@ async def voice_chat(app: Ariadne, event: MessageEvent, sender: Union[Friend, Me
         except asyncio.exceptions.TimeoutError:
             await SendMessage(app, MessageChain(Plain("超时,语音聊天模式自动退出")), sender, event.type)
             return
+        
+        try:
+            if config_json['chat_type'] == 1:
+                from modules.chat.Turing import turing_bot
+                bot = turing_bot
+            elif config_json['chat_type'] == 2:
+                from modules.chat.Molly import molly_bot
+                bot = molly_bot
+            else:
+                from modules.chat.DialogBot import dialogbot
+                bot = dialogbot
+        except:
+            logger.error('Chat module was not loaded correctly.')
+            await SendMessage(app, MessageChain(Plain("错误:聊天模块未加载,请联系机器人管理员")), sender, event.type)
         
         if Voice in ret_msg:
             voice = Voice(ret_msg)
@@ -98,6 +101,8 @@ async def voice_chat(app: Ariadne, event: MessageEvent, sender: Union[Friend, Me
                 content = await bot.contact(str(recog_word), 2, sender.id, sender.name, sender.group.id, sender.group.name)
             else:
                 content = await bot.contact(str(recog_word), 1, sender.id, sender.nickname)
+                
+            content.replace('BetaGo','我')
             
             jp_content = tencent_translater.translate(content)
             voice_path = await moegoe.text_to_voice(jp_content, voice_type)
@@ -159,6 +164,9 @@ async def voice_chat(app: Ariadne, event: MessageEvent, sender: Union[Friend, Me
                 content = await bot.contact(str(ret_msg), 2, sender.id, sender.name, sender.group.id, sender.group.name)
             else:
                 content = await bot.contact(str(ret_msg), 1, sender.id, sender.nickname)
+                
+            content.replace('BetaGo','我')
+                
             jp_content = tencent_translater.translate(content)
             voice_path = await moegoe.text_to_voice(jp_content, voice_type)
             if voice_path == None:
