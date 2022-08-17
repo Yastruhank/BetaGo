@@ -10,7 +10,7 @@ from graia.saya import Channel
 from graia.saya.builtins.broadcast.schema import ListenerSchema
 
 from utils.tools import SendMessage,addtwodimdict
-from modules.neu.NEU import NeuStu
+from .NEU import NeuStu
 
 channel = Channel.current()
 

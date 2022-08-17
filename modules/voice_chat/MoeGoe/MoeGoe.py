@@ -4,18 +4,18 @@ import logging
 
 logging.getLogger('numba').setLevel(logging.WARNING)
 
-import modules.voice_chat.MoeGoe.commons as commons
-import modules.voice_chat.MoeGoe.utils as utils
-from modules.voice_chat.MoeGoe.models import SynthesizerTrn
-from modules.voice_chat.MoeGoe.text import text_to_sequence
-from modules.voice_chat.MoeGoe.mel_processing import spectrogram_torch
+from .commons import intersperse
+from .utils import get_hparams_from_file, load_checkpoint, load_wav_to_torch
+from .models import SynthesizerTrn
+from .text import text_to_sequence
+from .mel_processing import spectrogram_torch
 
 from scipy.io.wavfile import write
 
 def get_text(text, hps):
     text_norm = text_to_sequence(text, hps.symbols, hps.data.text_cleaners)
     if hps.data.add_blank:
-        text_norm = commons.intersperse(text_norm, 0)
+        text_norm = intersperse(text_norm, 0)
     text_norm = LongTensor(text_norm)
     return text_norm
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     model = input('Path of a VITS model: ')
     config = input('Path of a config file: ')
     try:
-        hps_ms = utils.get_hparams_from_file(config)
+        hps_ms = get_hparams_from_file(config)
         net_g_ms = SynthesizerTrn(
             len(hps_ms.symbols),
             hps_ms.data.filter_length // 2 + 1,
@@ -53,7 +53,7 @@ if __name__ == '__main__':
             n_speakers=hps_ms.data.n_speakers,
             **hps_ms.model)
         _ = net_g_ms.eval()
-        _ = utils.load_checkpoint(model, net_g_ms, None)
+        _ = load_checkpoint(model, net_g_ms, None)
     except:
         print('Failed to load!')
         sys.exit(1)
@@ -91,7 +91,7 @@ if __name__ == '__main__':
         elif choice == 'v':
             wav_path = input('Path of a WAV file (22050 Hz, 16 bits, 1 channel) to convert:\n')
             print_speakers(hps_ms.speakers)
-            audio, sampling_rate = utils.load_wav_to_torch(wav_path)
+            audio, sampling_rate = load_wav_to_torch(wav_path)
 
             originnal_id = get_speaker_id('Original speaker ID: ')
             target_id = get_speaker_id('Target speaker ID: ')

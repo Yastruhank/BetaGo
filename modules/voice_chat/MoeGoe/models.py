@@ -3,12 +3,10 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-import modules.voice_chat.MoeGoe.commons as commons
-import modules.voice_chat.MoeGoe.modules as modules
-import modules.voice_chat.MoeGoe.attentions as attentions
-import modules.voice_chat.MoeGoe.monotonic_align as monotonic_align
-
-from modules.voice_chat.MoeGoe.commons import init_weights, get_padding
+from .modules import *
+from .attentions import Encoder
+from .monotonic_align import maximum_path
+from .commons import *
 
 from torch.nn import Conv1d, ConvTranspose1d, Conv2d
 from torch.nn.utils import weight_norm, remove_weight_norm, spectral_norm
@@ -24,25 +22,25 @@ class StochasticDurationPredictor(nn.Module):
     self.n_flows = n_flows
     self.gin_channels = gin_channels
 
-    self.log_flow = modules.Log()
+    self.log_flow = Log()
     self.flows = nn.ModuleList()
-    self.flows.append(modules.ElementwiseAffine(2))
+    self.flows.append(ElementwiseAffine(2))
     for i in range(n_flows):
-      self.flows.append(modules.ConvFlow(2, filter_channels, kernel_size, n_layers=3))
-      self.flows.append(modules.Flip())
+      self.flows.append(ConvFlow(2, filter_channels, kernel_size, n_layers=3))
+      self.flows.append(Flip())
 
     self.post_pre = nn.Conv1d(1, filter_channels, 1)
     self.post_proj = nn.Conv1d(filter_channels, filter_channels, 1)
-    self.post_convs = modules.DDSConv(filter_channels, kernel_size, n_layers=3, p_dropout=p_dropout)
+    self.post_convs = DDSConv(filter_channels, kernel_size, n_layers=3, p_dropout=p_dropout)
     self.post_flows = nn.ModuleList()
-    self.post_flows.append(modules.ElementwiseAffine(2))
+    self.post_flows.append(ElementwiseAffine(2))
     for i in range(4):
-      self.post_flows.append(modules.ConvFlow(2, filter_channels, kernel_size, n_layers=3))
-      self.post_flows.append(modules.Flip())
+      self.post_flows.append(ConvFlow(2, filter_channels, kernel_size, n_layers=3))
+      self.post_flows.append(Flip())
 
     self.pre = nn.Conv1d(in_channels, filter_channels, 1)
     self.proj = nn.Conv1d(filter_channels, filter_channels, 1)
-    self.convs = modules.DDSConv(filter_channels, kernel_size, n_layers=3, p_dropout=p_dropout)
+    self.convs = DDSConv(filter_channels, kernel_size, n_layers=3, p_dropout=p_dropout)
     if gin_channels != 0:
       self.cond = nn.Conv1d(gin_channels, filter_channels, 1)
 
@@ -106,9 +104,9 @@ class DurationPredictor(nn.Module):
 
     self.drop = nn.Dropout(p_dropout)
     self.conv_1 = nn.Conv1d(in_channels, filter_channels, kernel_size, padding=kernel_size//2)
-    self.norm_1 = modules.LayerNorm(filter_channels)
+    self.norm_1 = LayerNorm(filter_channels)
     self.conv_2 = nn.Conv1d(filter_channels, filter_channels, kernel_size, padding=kernel_size//2)
-    self.norm_2 = modules.LayerNorm(filter_channels)
+    self.norm_2 = LayerNorm(filter_channels)
     self.proj = nn.Conv1d(filter_channels, 1, 1)
 
     if gin_channels != 0:
@@ -154,7 +152,7 @@ class TextEncoder(nn.Module):
     self.emb = nn.Embedding(n_vocab, hidden_channels)
     nn.init.normal_(self.emb.weight, 0.0, hidden_channels**-0.5)
 
-    self.encoder = attentions.Encoder(
+    self.encoder = Encoder(
       hidden_channels,
       filter_channels,
       n_heads,
@@ -166,7 +164,7 @@ class TextEncoder(nn.Module):
   def forward(self, x, x_lengths):
     x = self.emb(x) * math.sqrt(self.hidden_channels) # [b, t, h]
     x = torch.transpose(x, 1, -1) # [b, h, t]
-    x_mask = torch.unsqueeze(commons.sequence_mask(x_lengths, x.size(2)), 1).to(x.dtype)
+    x_mask = torch.unsqueeze(sequence_mask(x_lengths, x.size(2)), 1).to(x.dtype)
 
     x = self.encoder(x * x_mask, x_mask)
     stats = self.proj(x) * x_mask
@@ -195,8 +193,8 @@ class ResidualCouplingBlock(nn.Module):
 
     self.flows = nn.ModuleList()
     for i in range(n_flows):
-      self.flows.append(modules.ResidualCouplingLayer(channels, hidden_channels, kernel_size, dilation_rate, n_layers, gin_channels=gin_channels, mean_only=True))
-      self.flows.append(modules.Flip())
+      self.flows.append(ResidualCouplingLayer(channels, hidden_channels, kernel_size, dilation_rate, n_layers, gin_channels=gin_channels, mean_only=True))
+      self.flows.append(Flip())
 
   def forward(self, x, x_mask, g=None, reverse=False):
     if not reverse:
@@ -227,11 +225,11 @@ class PosteriorEncoder(nn.Module):
     self.gin_channels = gin_channels
 
     self.pre = nn.Conv1d(in_channels, hidden_channels, 1)
-    self.enc = modules.WN(hidden_channels, kernel_size, dilation_rate, n_layers, gin_channels=gin_channels)
+    self.enc = WN(hidden_channels, kernel_size, dilation_rate, n_layers, gin_channels=gin_channels)
     self.proj = nn.Conv1d(hidden_channels, out_channels * 2, 1)
 
   def forward(self, x, x_lengths, g=None):
-    x_mask = torch.unsqueeze(commons.sequence_mask(x_lengths, x.size(2)), 1).to(x.dtype)
+    x_mask = torch.unsqueeze(sequence_mask(x_lengths, x.size(2)), 1).to(x.dtype)
     x = self.pre(x) * x_mask
     x = self.enc(x, x_mask, g=g)
     stats = self.proj(x) * x_mask
@@ -246,7 +244,7 @@ class Generator(torch.nn.Module):
         self.num_kernels = len(resblock_kernel_sizes)
         self.num_upsamples = len(upsample_rates)
         self.conv_pre = Conv1d(initial_channel, upsample_initial_channel, 7, 1, padding=3)
-        resblock = modules.ResBlock1 if resblock == '1' else modules.ResBlock2
+        resblock = ResBlock1 if resblock == '1' else ResBlock2
 
         self.ups = nn.ModuleList()
         for i, (u, k) in enumerate(zip(upsample_rates, upsample_kernel_sizes)):
@@ -272,7 +270,7 @@ class Generator(torch.nn.Module):
           x = x + self.cond(g)
 
         for i in range(self.num_upsamples):
-            x = F.leaky_relu(x, modules.LRELU_SLOPE)
+            x = F.leaky_relu(x, LRELU_SLOPE)
             x = self.ups[i](x)
             xs = None
             for j in range(self.num_kernels):
@@ -323,7 +321,7 @@ class DiscriminatorP(torch.nn.Module):
 
         for l in self.convs:
             x = l(x)
-            x = F.leaky_relu(x, modules.LRELU_SLOPE)
+            x = F.leaky_relu(x, LRELU_SLOPE)
             fmap.append(x)
         x = self.conv_post(x)
         fmap.append(x)
@@ -351,7 +349,7 @@ class DiscriminatorS(torch.nn.Module):
 
         for l in self.convs:
             x = l(x)
-            x = F.leaky_relu(x, modules.LRELU_SLOPE)
+            x = F.leaky_relu(x, LRELU_SLOPE)
             fmap.append(x)
         x = self.conv_post(x)
         fmap.append(x)
@@ -476,7 +474,7 @@ class SynthesizerTrn(nn.Module):
       neg_cent = neg_cent1 + neg_cent2 + neg_cent3 + neg_cent4
 
       attn_mask = torch.unsqueeze(x_mask, 2) * torch.unsqueeze(y_mask, -1)
-      attn = monotonic_align.maximum_path(neg_cent, attn_mask.squeeze(1)).unsqueeze(1).detach()
+      attn = maximum_path(neg_cent, attn_mask.squeeze(1)).unsqueeze(1).detach()
 
     w = attn.sum(2)
     if self.use_sdp:
@@ -491,7 +489,7 @@ class SynthesizerTrn(nn.Module):
     m_p = torch.matmul(attn.squeeze(1), m_p.transpose(1, 2)).transpose(1, 2)
     logs_p = torch.matmul(attn.squeeze(1), logs_p.transpose(1, 2)).transpose(1, 2)
 
-    z_slice, ids_slice = commons.rand_slice_segments(z, y_lengths, self.segment_size)
+    z_slice, ids_slice = rand_slice_segments(z, y_lengths, self.segment_size)
     o = self.dec(z_slice, g=g)
     return o, l_length, attn, ids_slice, x_mask, y_mask, (z, z_p, m_p, logs_p, m_q, logs_q)
 
@@ -509,9 +507,9 @@ class SynthesizerTrn(nn.Module):
     w = torch.exp(logw) * x_mask * length_scale
     w_ceil = torch.ceil(w)
     y_lengths = torch.clamp_min(torch.sum(w_ceil, [1, 2]), 1).long()
-    y_mask = torch.unsqueeze(commons.sequence_mask(y_lengths, None), 1).to(x_mask.dtype)
+    y_mask = torch.unsqueeze(sequence_mask(y_lengths, None), 1).to(x_mask.dtype)
     attn_mask = torch.unsqueeze(x_mask, 2) * torch.unsqueeze(y_mask, -1)
-    attn = commons.generate_path(w_ceil, attn_mask)
+    attn = generate_path(w_ceil, attn_mask)
 
     m_p = torch.matmul(attn.squeeze(1), m_p.transpose(1, 2)).transpose(1, 2) # [b, t', t], [b, t, d] -> [b, d, t']
     logs_p = torch.matmul(attn.squeeze(1), logs_p.transpose(1, 2)).transpose(1, 2) # [b, t', t], [b, t, d] -> [b, d, t']

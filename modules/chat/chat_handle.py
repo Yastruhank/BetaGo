@@ -11,9 +11,9 @@ from graia.saya.builtins.broadcast.schema import ListenerSchema
 
 from utils.tools import SendMessage
 
-from modules.chat.Molly import molly_bot
-from modules.chat.Turing import turing_bot
-from modules.chat.DialogBot import dialogbot
+from .Molly import molly_bot
+from .Turing import turing_bot
+from .DialogBot import dialogbot
 
 channel = Channel.current()
 

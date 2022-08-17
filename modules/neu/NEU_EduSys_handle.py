@@ -12,7 +12,7 @@ from graia.saya import Channel
 from graia.saya.builtins.broadcast.schema import ListenerSchema
 
 from utils.tools import SendMessage
-from modules.neu.NEU_EduSys import NEU_EduSys
+from .NEU_EduSys import NEU_EduSys
 
 channel = Channel.current()
 

@@ -15,7 +15,7 @@ from graia.scheduler.saya import SchedulerSchema
 from graia.saya.builtins.broadcast.schema import ListenerSchema
 from graia.scheduler import GraiaScheduler, timers
 
-from modules.neu.NEU_HealReport import NEU_HealReport
+from .NEU_HealReport import NEU_HealReport
 from utils.tools import SendMessage
 
 channel = Channel.current()

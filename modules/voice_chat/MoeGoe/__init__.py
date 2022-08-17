@@ -3,12 +3,11 @@ import os
 
 from torch import no_grad, LongTensor
 
-import modules.voice_chat.MoeGoe.commons
-import modules.voice_chat.MoeGoe.utils
-from modules.voice_chat.MoeGoe.models import SynthesizerTrn
-from modules.voice_chat.MoeGoe.text import text_to_sequence
-from modules.voice_chat.MoeGoe.mel_processing import spectrogram_torch
-from modules.voice_chat.MoeGoe.MoeGoe import get_text
+from .utils import get_hparams_from_file, load_checkpoint
+from .models import SynthesizerTrn
+from .text import text_to_sequence
+from .mel_processing import spectrogram_torch
+from .MoeGoe import get_text
 
 from scipy.io.wavfile import write
 from loguru import logger
@@ -18,7 +17,7 @@ from loguru import logger
 class MoeGoe:
     def __init__(self, model_path, config_path):
         try:
-            self.hps_ms = utils.get_hparams_from_file(config_path)
+            self.hps_ms = get_hparams_from_file(config_path)
             self.net_g_ms = SynthesizerTrn(
                 len(self.hps_ms.symbols),
                 self.hps_ms.data.filter_length // 2 + 1,
@@ -26,7 +25,7 @@ class MoeGoe:
                 n_speakers=self.hps_ms.data.n_speakers,
                 **self.hps_ms.model)
             _ = self.net_g_ms.eval()
-            _ = utils.load_checkpoint(model_path, self.net_g_ms, None)
+            _ = load_checkpoint(model_path, self.net_g_ms, None)
             
             self.index = 0
             self.init_done = True

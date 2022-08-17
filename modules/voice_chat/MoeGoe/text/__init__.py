@@ -1,6 +1,8 @@
 """ from https://github.com/keithito/tacotron """
-from modules.voice_chat.MoeGoe.text import cleaners
+import sys, os
 
+sys.path.append(os.path.join(os.path.dirname(__file__)))
+import cleaners
 
 def text_to_sequence(text, symbols, cleaner_names):
   '''Converts a string of text to a sequence of IDs corresponding to the symbols in the text.

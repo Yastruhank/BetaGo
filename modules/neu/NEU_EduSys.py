@@ -6,7 +6,7 @@ from lxml import etree
 import platform
 import subprocess
 from utils.tools import SendMessage,addtwodimdict
-from modules.neu.NEU import NeuStu
+from .NEU import NeuStu
 import heapq
 
 class NEU_EduSys(NeuStu):

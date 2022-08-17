@@ -19,9 +19,9 @@ from graia.saya.builtins.broadcast.schema import ListenerSchema
 from graia.ariadne.util.interrupt import FunctionWaiter
 
 from utils.tools import SendMessage
-from modules.voice_chat.MoeGoe import MoeGoe
-from modules.voice_chat.translate import tencent_translater
-from modules.voice_chat.voice_recognition import tencent_voice_recognition
+from .MoeGoe import MoeGoe
+from .translate import tencent_translater
+from .voice_recognition import tencent_voice_recognition
 
 channel = Channel.current()
 
@@ -44,7 +44,7 @@ async def tts(app: Ariadne, event: MessageEvent, sender: Union[Friend, Member, C
     if voice_path == None:
         await SendMessage(app, MessageChain('错误的文本输入'), sender, event.type)
     else:
-        await SendMessage(app, MessageChain(Voice(data_bytes=await silkcoder.async_encode(voice_path, rate=48000))), sender, event.type, no_group_mention=1)
+        await SendMessage(app, MessageChain(Voice(data_bytes=await silkcoder.async_encode(voice_path, rate=48000, codec = 1))), sender, event.type, no_group_mention=1)
         os.remove(voice_path)
         
         
@@ -104,7 +104,7 @@ async def voice_chat(app: Ariadne, event: MessageEvent, sender: Union[Friend, Me
             if voice_path == None:
                 await SendMessage(app, MessageChain('文本出错'), sender, event.type)
             else:
-                await SendMessage(app, MessageChain(Voice(data_bytes=await silkcoder.async_encode(voice_path, rate=48000))), sender, event.type, no_group_mention=1)
+                await SendMessage(app, MessageChain(Voice(data_bytes=await silkcoder.async_encode(voice_path, rate=48000, codec = 1))), sender, event.type, no_group_mention=1)
                 if with_text:
                     await SendMessage(app, MessageChain(content), sender, event.type)
                 os.remove(voice_path)
@@ -164,7 +164,7 @@ async def voice_chat(app: Ariadne, event: MessageEvent, sender: Union[Friend, Me
             if voice_path == None:
                 await SendMessage(app, MessageChain('错误的文本输入'), sender, event.type)
             else:
-                await SendMessage(app, MessageChain(Voice(data_bytes=await silkcoder.async_encode(voice_path, rate=48000))), sender, event.type, no_group_mention=1)
+                await SendMessage(app, MessageChain(Voice(data_bytes=await silkcoder.async_encode(voice_path, rate=48000, codec = 1))), sender, event.type, no_group_mention=1)
                 if with_text:
                     await SendMessage(app, MessageChain(content), sender, event.type)
                 os.remove(voice_path)

@@ -1,4 +1,7 @@
 import numba
+import logging
+
+logging.getLogger('numba').setLevel(logging.WARNING)
 
 
 @numba.jit(numba.void(numba.int32[:,:,::1], numba.float32[:,:,::1], numba.int32[::1], numba.int32[::1]), nopython=True, nogil=True)

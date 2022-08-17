@@ -22,7 +22,7 @@ channel = Channel.current()
 
 @channel.use(ListenerSchema(listening_events=[MessageEvent]))
 async def getup(app: Ariadne, event: MessageEvent, sender: Union[Friend, Member, Client, Stranger], source: Source, message: MessageChain):
-    from modules.setu.setu import setu_bot
+    from .setu import setu_bot
     param = ''
     if(str(message)[0:4] == '来点涩图' or str(message)[0:4] == '来点色图'):
         if(len(str(message))>4):

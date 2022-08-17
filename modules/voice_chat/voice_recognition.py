@@ -43,7 +43,6 @@ class TencentVoiceRecognition:
                 }
         req.from_json_string(json.dumps(__json))
         resp = self.client.SentenceRecognition(req)
-        print(resp)
         return json.loads(resp.to_json_string())['Result']
     
 from core.load_param import config_json
