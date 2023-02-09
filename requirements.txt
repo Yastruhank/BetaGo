@@ -9,7 +9,7 @@ audioread==2.1.9
 beautifulsoup4==4.11.1
 bs4==0.0.1
 cchardet==2.1.7
-certifi==2022.5.18.1
+certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==2.1.0
 colorama==0.4.4
