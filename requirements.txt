@@ -77,7 +77,7 @@ statv==0.2.2
 tencentcloud-sdk-python==3.0.712
 threadpoolctl==3.1.0
 tokenizers==0.12.1
-torch==1.7.1
+torch==1.13.1
 tqdm==4.64.0
 transformers==4.20.1
 typing_extensions==4.3.0
