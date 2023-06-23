@@ -1,0 +1,16 @@
+{
+    "name": "poe模块",
+    "description": "用于接入poe",
+    "module": [
+        "modules.poe.poe"
+    ],
+    "command": [
+        {
+            "name": "/poe",
+            "usage": "/poe [content]",
+            "description": "lao lao is pig",
+            "from": "modules.poe.poe",
+            "hidden": 0
+        }
+    ]
+}
